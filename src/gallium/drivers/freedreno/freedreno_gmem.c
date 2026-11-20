@@ -462,9 +462,9 @@ gmem_key_init(struct fd_batch *batch, bool assume_zs, bool no_scis_opt)
 
    if (has_zs || assume_zs) {
       struct fd_resource *rsc = fd_resource(pfb->zsbuf->texture);
-      key->zsbuf_cpp[0] = rsc->layout.cpp * pfb->samples;
+      key->zsbuf_cpp[0] = util_format_get_blocksize(rsc->layout.format) * pfb->samples;
       if (rsc->stencil)
-         key->zsbuf_cpp[1] = rsc->stencil->layout.cpp * pfb->samples;
+         key->zsbuf_cpp[1] = util_format_get_blocksize(rsc->stencil->layout.format) * pfb->samples;
 
       /* If we clear z or s but not both, and we are using z24s8 (ie.
        * !separate_stencil) then we need to restore the other, even if
