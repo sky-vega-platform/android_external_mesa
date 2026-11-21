@@ -406,6 +406,11 @@ fd5_emit_tile_init(struct fd_batch *batch) assert_dt
 
    emit_zs(ring, pfb->zsbuf, batch->gmem_state);
    emit_mrt(ring, pfb->nr_cbufs, pfb->cbufs, batch->gmem_state);
+   /* The binning pass and the first tile's mem2gmem come before any
+    * renderprep, so they would otherwise run with the sample count the
+    * previous batch left behind.
+    */
+   emit_msaa(ring, pfb->samples);
 
    /* Enable stream output for the first pass (likely the binning). */
    OUT_PKT4(ring, REG_A5XX_VPC_SO_OVERRIDE, 1);
